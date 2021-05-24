@@ -4,7 +4,15 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Ball extends AbstractGameObject {
-    public Ball(Panel panel, HashMap<String, GameObject> hashgo,int w, int h, int x, int y) {
+    public Ball(Panel panel, HashMap<String, GameObject> hashgo, int w, int h, int x, int y, int speedX, int speedY) {
+        this.pann = pann;
+        this.hashgo = hashgo;
+        this.w = w;
+        this.h = h;
+        this.x = x;
+        this.y = y;
+        this.speedX = speedX;
+        this.speedY = speedY;
     }
 
     @Override

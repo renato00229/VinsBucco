@@ -8,4 +8,5 @@ public abstract class AbstractGameObject implements GameObject{
     HashMap<String, GameObject> hashgo;
     int w, h;
     int x, y;
+    int speedX, speedY;
 }

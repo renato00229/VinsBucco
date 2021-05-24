@@ -16,7 +16,7 @@ public class Panel extends JPanel implements ActionListener,KeyListener{
 
     public Panel(){
         super();
-        setBackground(Color.BLACK);
+        setBackground(Color.white);
         addKeyListener( this);
         setFocusable(true);
 
@@ -26,11 +26,15 @@ public class Panel extends JPanel implements ActionListener,KeyListener{
         Random rd= new Random();
         hashgo = new HashMap<>();
 
-        hashgo.put("ball", new Ball(this, hashgo, 20, 20, getWidth()/2, getHeight()/2));
-        hashgo.put("disk_1", new Disk (this, hashgo, 20, 20, getWidth()/2, getHeight()/2) );
-        hashgo.put("disk_2", new Disk(this, hashgo, 20, 20, getWidth()/2, getHeight()/2));
-        hashgo.put("goal_1", new Goal(this, hashgo, 20, 20, getWidth()/2, getHeight()/2));
-        hashgo.put("goal_2", new Goal(this, hashgo, 20, 20, getWidth()/2, getHeight()/2));
+        hashgo.put("ball", new Ball(this, hashgo, 20, 20, getWidth()/2, getHeight()/2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+        hashgo.put("disk_1", new Disk (this, hashgo, 30, 30, getWidth()/2,
+                getHeight()/2, rd.nextInt(17) + 1, rd.nextInt(17) + 7));
+        hashgo.put("disk_2", new Disk(this, hashgo, 30, 30, getWidth()/2,
+                getHeight()/2, rd.nextInt(51) + 1, rd.nextInt(51) + 7));
+        hashgo.put("goal_1", new Goal(this, hashgo, 20, 100, 0,
+                (getHeight() - 60) / 2, 0, 0));
+        hashgo.put("goal_2", new Goal(this, hashgo, 20, 100, getWidth() - 20,
+                (getHeight() - 60) / 2, 0, 0));
 
         time = new Timer(20, this);
         time.start();

@@ -11,7 +11,7 @@ public class TestApp {
             Panel game = new Panel();
 
             f.setContentPane(game);
-            f.setSize(1100, 700);
+            f.setSize(700, 400);
             f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             f.setResizable(false);
             f.setVisible(true);
