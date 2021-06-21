@@ -22,4 +22,9 @@ public class Disk extends AbstractGameObject {
         g.setColor(Color.red);
         g.fillOval(x+2,y+2, w+2, h+2);
     }
+
+    @Override
+    public void updatevel() {
+      //chiamare Input
+    }
 }

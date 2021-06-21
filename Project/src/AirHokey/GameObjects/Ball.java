@@ -22,4 +22,42 @@ public class Ball extends AbstractGameObject {
         g.setColor(Color.cyan);
         g.fillOval(x,y,w,h);
     }
+
+    @Override
+    public void updatevel() {
+        x+=speedX;
+        y+=speedY;
+        x += speedX;
+        y += speedY;
+
+        // left wall
+        if (x < 0) {
+            speedX = -speedX;
+            Goal p = ((Goal) hashgo.get("player_dx"));
+            p.setScore(p.getScore() + 1);
+        }
+
+        // right wall
+        if (x > pann.getWidth() - w) {
+            speedX = -speedX;
+            Goal p = ((Goal) hashgo.get("player_sx"));
+            p.setScore(p.getScore() + 1);
+        }
+
+        // horizontal walls
+        if (y < 0 || y > pann.getHeight() - w) {
+            speedY = -speedY;
+        }
+
+        // players
+        for (GameObject go : hashgo.values()) {
+            AbstractGameObject gam = (AbstractGameObject) go;
+            if (gam != this) {
+                if (gam.getBounds().intersects(getBounds())) {
+                    speedX = -speedX;
+                }
+            }
+        }
+    }
 }
+

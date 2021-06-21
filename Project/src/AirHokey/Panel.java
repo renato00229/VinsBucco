@@ -36,13 +36,13 @@ public class Panel extends JPanel {
         gameObjects = new HashMap<>();
         gameObjects.put("ball", new Ball(this, gameObjects, 20, 20, getWidth() / 2, getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
         gameObjects.put("disk_1", new Disk(this, gameObjects, 30, 30, getWidth() / 4,
-                getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+                getHeight() / 2, 0,0));
         gameObjects.put("disk_2", new Disk(this, gameObjects, 30, 30, getWidth() - 150,
-                getHeight() / 6, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
-        gameObjects.put("goal_1", new Goal(this, gameObjects, 20, 100, 0,
-                (getHeight() - 60) / 2, 0, 0));
-        gameObjects.put("goal_2", new Goal(this, gameObjects, 20, 100, getWidth() - 20,
-                (getHeight() - 60) / 2, 0, 0));
+                getHeight() / 6, 0,0));
+        gameObjects.put("goal_1", new Goal(this, gameObjects, 15, 100, 0,
+                (getHeight() - 150) / 2, 0, 0));
+        gameObjects.put("goal_2", new Goal(this, gameObjects, 20, 100, getWidth() - 30,
+                (getHeight() - 150) / 2, 0, 0));
         Goal p1 = ((Goal) gameObjects.get("goal_1"));
         Goal p2 = ((Goal) gameObjects.get("goal_2"));
     }
