@@ -1,11 +1,13 @@
-package AirHokey;
+package AirHokey.GameObjects;
+
+import AirHokey.Panel;
 
 import java.awt.*;
 import java.util.HashMap;
 
 public class Disk extends AbstractGameObject {
-    public Disk(Panel panel, HashMap<String, GameObject> hashgo,int w, int h, int x, int y,int speedX, int speedY) {
-        this.pann = pann;
+    public Disk(Panel panel, HashMap<String, GameObject> hashgo, int w, int h, int x, int y, int speedX, int speedY) {
+        this.pann = panel;
         this.hashgo = hashgo;
         this.w = w;
         this.h = h;

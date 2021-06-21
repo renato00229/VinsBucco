@@ -1,72 +1,61 @@
 package AirHokey;
 
+import AirHokey.GameObjects.Ball;
+import AirHokey.GameObjects.Disk;
+import AirHokey.GameObjects.GameObject;
+import AirHokey.GameObjects.Goal;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Panel extends JPanel implements ActionListener,KeyListener{
+public class Panel extends JPanel {
     private static final long serialVersionUID = 1L;
-    Timer time;
-    HashMap<String, GameObject> hashgo;
+    private HashMap<String, GameObject> gameObjects;
 
-    public Panel(){
-        super();
-        setBackground(Color.white);
-        addKeyListener( this);
+    public Panel() {
+        super(); //automatic in every class, not needed
+        //setBackground(Color.white);  //anche questo può dare problemi
+        //guarda   paintComponent(Graphics g);
+
+    }
+
+    public HashMap<String, GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
+    public void init() {
+        addKeyListener(new Input());  //separated, easy to change later
         setFocusable(true);
-
+        initObjects();
     }
 
-    public void start(){
-        Random rd= new Random();
-        hashgo = new HashMap<>();
-
-        hashgo.put("ball", new Ball(this, hashgo, 20, 20, getWidth()/2, getHeight()/2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
-        hashgo.put("disk_1", new Disk (this, hashgo, 30, 30, getWidth()/4,
-                getHeight()/2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
-        hashgo.put("disk_2", new Disk(this, hashgo, 30, 30, getWidth() - 150,
-                getHeight()/6, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
-        hashgo.put("goal_1", new Goal(this, hashgo, 20, 100, 0,
+    public void initObjects() {
+        Random rd = new Random();
+        gameObjects = new HashMap<>();
+        gameObjects.put("ball", new Ball(this, gameObjects, 20, 20, getWidth() / 2, getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+        gameObjects.put("disk_1", new Disk(this, gameObjects, 30, 30, getWidth() / 4,
+                getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+        gameObjects.put("disk_2", new Disk(this, gameObjects, 30, 30, getWidth() - 150,
+                getHeight() / 6, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+        gameObjects.put("goal_1", new Goal(this, gameObjects, 20, 100, 0,
                 (getHeight() - 60) / 2, 0, 0));
-        hashgo.put("goal_2", new Goal(this, hashgo, 20, 100, getWidth() - 20,
+        gameObjects.put("goal_2", new Goal(this, gameObjects, 20, 100, getWidth() - 20,
                 (getHeight() - 60) / 2, 0, 0));
-
-        time = new Timer(20, this);
-        time.start();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Goal p1 = ((Goal) hashgo.get("goal_1"));
-        Goal p2 = ((Goal) hashgo.get("goal_2"));
-
-
-
+        Goal p1 = ((Goal) gameObjects.get("goal_1"));
+        Goal p2 = ((Goal) gameObjects.get("goal_2"));
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(new Color(209, 255, 186));
+        g.fillRect(0, 0, getWidth(), getHeight());
 
-        for(GameObject obj : hashgo.values())
+        for (GameObject obj : gameObjects.values())
             obj.paint(g);
-
-
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        System.out.println(e);
-    }
+
 }

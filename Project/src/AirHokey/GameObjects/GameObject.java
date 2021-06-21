@@ -1,4 +1,4 @@
-package AirHokey;
+package AirHokey.GameObjects;
 
 import java.awt.*;
 public interface GameObject {
