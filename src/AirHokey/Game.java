@@ -31,7 +31,7 @@ public class Game {
             public void run() {
                 loop();
             }
-        }, 30, 12, TimeUnit.MILLISECONDS);
+        }, 30, 2, TimeUnit.MILLISECONDS);
     }
 
     public void loop() {
@@ -67,8 +67,8 @@ public class Game {
     public void updateVelocities(HashMap<String, GameObject> allObjects) {
         for (GameObject g : allObjects.values()) {
             AbstractGameObject gameObject = (AbstractGameObject) g;
-            gameObject.speedX += 0.1;   //TODO: logica qui
-            gameObject.speedY += 0.1;
+            gameObject.speedX += 0;   //TODO: logica qui
+            gameObject.speedY += 0;
         }
     }
 

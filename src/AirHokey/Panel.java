@@ -1,9 +1,6 @@
 package AirHokey;
 
-import AirHokey.GameObjects.Ball;
-import AirHokey.GameObjects.Disk;
-import AirHokey.GameObjects.GameObject;
-import AirHokey.GameObjects.Goal;
+import AirHokey.GameObjects.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +12,7 @@ public class Panel extends JPanel {
     private HashMap<String, GameObject> gameObjects;
 
     public Panel() {
-        super(); //automatic in every class, not needed
+        //super(); //automatic in every class, not needed
         //setBackground(Color.white);  //anche questo può dare problemi
         //guarda   paintComponent(Graphics g);
 
@@ -26,9 +23,9 @@ public class Panel extends JPanel {
     }
 
     public void init() {
-        addKeyListener(new Input());  //separated, easy to change later
         setFocusable(true);
         initObjects();
+        addKeyListener(new Input(((AbstractGameObject) gameObjects.get("disk_1")), ((AbstractGameObject) gameObjects.get("disk_2"))));  //separated, easy to change later
     }
 
     public void initObjects() {
@@ -36,9 +33,9 @@ public class Panel extends JPanel {
         gameObjects = new HashMap<>();
         gameObjects.put("ball", new Ball(this, gameObjects, 20, 20, getWidth() / 2, getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
         gameObjects.put("disk_1", new Disk(this, gameObjects, 30, 30, getWidth() / 4,
-                getHeight() / 2, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+                getHeight() / 2, 0, 0));
         gameObjects.put("disk_2", new Disk(this, gameObjects, 30, 30, getWidth() - 150,
-                getHeight() / 6, rd.nextInt(6) + 3, rd.nextInt(6) + 3));
+                getHeight() / 6, 0, 0));
         gameObjects.put("goal_1", new Goal(this, gameObjects, 20, 100, 0,
                 (getHeight() - 60) / 2, 0, 0));
         gameObjects.put("goal_2", new Goal(this, gameObjects, 20, 100, getWidth() - 20,
