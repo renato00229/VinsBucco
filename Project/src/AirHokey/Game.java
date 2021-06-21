@@ -66,12 +66,9 @@ public class Game {
     // aggiungerà 0 alla posizione, quindi no movimento.
     public void updateVelocities(HashMap<String, GameObject> allObjects) {
         for (GameObject g : allObjects.values()) {
-            /*AbstractGameObject gameObject = (AbstractGameObject) g;
+            AbstractGameObject gameObject = (AbstractGameObject) g;
             gameObject.speedX += 0.1;   //TODO: logica qui
             gameObject.speedY += 0.1;
-
-            */
-            g.updatevel();
         }
     }
 
@@ -97,7 +94,10 @@ public class Game {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Tryna pushing tips
     public void init() {  //init frame and panel game
         frame = new JFrame("Air Hokey");
         panel = new Panel();
