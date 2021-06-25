@@ -1,11 +1,11 @@
-package Game;
+import Game.GameBoard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class TestApp {
+public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Air Hockey");
         GameBoard panel = new GameBoard();
