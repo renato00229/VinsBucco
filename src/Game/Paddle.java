@@ -1,74 +1,91 @@
 package Game;
 
+import Functions.Coordinate;
+
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
-public class Paddle extends Rectangle implements MouseMotionListener, Coordinate {
-    public int yVelocity, xVelocity;
-    public int initialX, initialY;
+public class Paddle extends MouseAdapter implements MouseMotionListener, Coordinate {
+    private final double width, height;
+    private boolean drag;
+    private double x;
+    private double y;
+    private Point p = new Point(-1, -1);
 
     public Paddle(int x, int y, int Paddle_W, int Paddle_H) {
-        super(x, y, Paddle_W, Paddle_H);
-    }
+        this.setX(x);
+        this.setY(y);
+        this.width = Paddle_W;
+        this.height = Paddle_H;
 
-    public void setYDirection(int yDirection) {
-        yVelocity = yDirection;
     }
 
     public void move() {
-        x += xVelocity;
-        y += yVelocity;
-        xVelocity = 0;
-        yVelocity = 0;
+        if (isDrag()) {
+            setX(getP().x);
+            setY(getP().y);
+        }
     }
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.BLUE);
-        Double paddle = new Double(x + 10, y + 10, width - 20, height - 20);
+        Ellipse2D.Double paddle = new Ellipse2D.Double(getX(), getY(), width, height);
         g2.fill(paddle);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        Point p = e.getPoint();
-        if (p.x >= x - 20 && p.x <= (x + width + 20) && p.y >= y - 20 && p.y <= (y + height + 20)) {
-            setXDirection(p.x - initialX);
-            setYDirection(p.y - initialY);
-            move();
-            initialX = p.x;
-            initialY = p.y;
+        setP(e.getPoint());
+        if (getP().x >= getX() && getP().x <= (getX() + width) && getP().y >= getY() && getP().y <= (getY() + height)) {
+            setDrag(true);
         }
     }
 
-
-    private void setXDirection(int xDir) {
-        xVelocity = xDir;
+    @Override
+    public Point2D.Double center() {
+        return new Point2D.Double(getX() + (width / 2.), getY() + (height / 2.));
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
+        setDrag(false);
     }
 
-    @Override
-    public Point W() {
-        return new Point(x, y + (height / 2));
+    public boolean isDrag() {
+        return drag;
     }
 
-    @Override
-    public Point E() {
-        return new Point(x + width, y + (height / 2));
+    public void setDrag(boolean drag) {
+        this.drag = drag;
     }
 
-    @Override
-    public Point N() {
-        return new Point(x + (width / 2), y);
+    public double getX() {
+        return x;
     }
 
-    @Override
-    public Point S() {
-        return new Point(x + (width / 2), y + height);
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public Point getP() {
+        return p;
+    }
+
+    public void setP(Point p) {
+        this.p = p;
     }
 }
 
