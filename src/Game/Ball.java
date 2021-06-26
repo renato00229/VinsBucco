@@ -8,8 +8,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
+import static Game.GameBoard.MAX_SPEED;
+
 public class Ball implements Coordinate, MovingObj {
-    private static final double MAX_SPEED = 6;
     private final Random random = new Random();
     private final int R, G, B;
     private double x;

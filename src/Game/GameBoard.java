@@ -22,7 +22,8 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
             PADDLE_WIDTH = 60,
             PADDLE_RAD = 30,
             BALL_RAD = 15,
-            GOAL_HEIGHT = 150;
+            GOAL_HEIGHT = 150,
+            MAX_SPEED = 6;
     private final Score score;
     private static double GOAL_SPEED = 0;
     private Goal goal;

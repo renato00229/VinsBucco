@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import static Game.GameBoard.GOAL_HEIGHT;
+import static Game.GameBoard.MAX_SPEED;
 
 public class Goal implements Coordinate, MovingObj {
     private final double width;
@@ -32,7 +33,7 @@ public class Goal implements Coordinate, MovingObj {
     }
 
     public void move() {
-        setYVelocity(Math.min(getYVelocity(), 6));
+        setYVelocity(Math.min(getYVelocity(), MAX_SPEED));
         setY(getY() + getYVelocity());
     }
 
