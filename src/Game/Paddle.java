@@ -14,20 +14,19 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
     private boolean drag;
     private double x;
     private double y;
-    private Point p = new Point(-1, -1);
+    private Point mouseP = new Point(-1, -1);
 
     public Paddle(int x, int y, int Paddle_W, int Paddle_H) {
         this.setX(x);
         this.setY(y);
         this.width = Paddle_W;
         this.height = Paddle_H;
-
     }
 
     public void move() {
         if (isDrag()) {
-            setX(getP().x);
-            setY(getP().y);
+            setX(getMouseP().x);
+            setY(getMouseP().y);
         }
     }
 
@@ -40,8 +39,8 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        setP(e.getPoint());
-        if (getP().x >= getX() && getP().x <= (getX() + width) && getP().y >= getY() && getP().y <= (getY() + height)) {
+        setMouseP(e.getPoint());
+        if (getMouseP().x >= getX() && getMouseP().x <= (getX() + width) && getMouseP().y >= getY() && getMouseP().y <= (getY() + height)) {
             setDrag(true);
         }
     }
@@ -80,12 +79,12 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
         this.y = y;
     }
 
-    public Point getP() {
-        return p;
+    public Point getMouseP() {
+        return mouseP;
     }
 
-    public void setP(Point p) {
-        this.p = p;
+    public void setMouseP(Point mouseP) {
+        this.mouseP = mouseP;
     }
 }
 

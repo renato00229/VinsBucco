@@ -1,13 +1,14 @@
 package Game;
 
 import Functions.Coordinate;
+import Functions.MovingObj;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
-public class Ball implements Coordinate {
+public class Ball implements Coordinate, MovingObj {
     private static final double MAX_SPEED = 6;
     private final Random random = new Random();
     private final int R, G, B;
@@ -34,26 +35,19 @@ public class Ball implements Coordinate {
         int random_XDir = random.nextInt(2);
         if (random_XDir == 0)
             random_XDir--;
-        setXDirection(random_XDir * initialSpeed);
+        setXVelocity(random_XDir * initialSpeed);
         int random_YDir = random.nextInt(2);
         if (random_YDir == 0)
             random_YDir--;
-        setYDirection(random_YDir * initialSpeed);
+        setYVelocity(random_YDir * initialSpeed);
     }
 
-    public void setXDirection(double xDir) {
-        setxVelocity(xDir);
-    }
-
-    public void setYDirection(double yDir) {
-        setyVelocity(yDir);
-    }
 
     public void move() {
-        setxVelocity(Math.min(getxVelocity(), MAX_SPEED));
-        setyVelocity(Math.min(getyVelocity(), MAX_SPEED));
-        setX(getX() + getxVelocity());
-        setY(getY() + getyVelocity());
+        setXVelocity(Math.min(getXVelocity(), MAX_SPEED));
+        setYVelocity(Math.min(getYVelocity(), MAX_SPEED));
+        setX(getX() + getXVelocity());
+        setY(getY() + getYVelocity());
     }
 
     public void draw(Graphics g) {
@@ -68,23 +62,19 @@ public class Ball implements Coordinate {
     public Point2D.Double center() {
         return new Point2D.Double(getX() + (getWidth() / 2), getY() + (getHeight() / 2));
     }
-
-
     public double getX() {
         return x;
     }
-
     public void setX(double x) {
         this.x = x;
     }
-
     public double getY() {
         return y;
     }
-
     public void setY(double y) {
         this.y = y;
     }
+
 
     public double getWidth() {
         return width;
@@ -102,19 +92,20 @@ public class Ball implements Coordinate {
         this.height = height;
     }
 
-    public double getxVelocity() {
+
+    public double getXVelocity() {
         return xVelocity;
     }
 
-    public void setxVelocity(double xVelocity) {
+    public void setXVelocity(double xVelocity) {
         this.xVelocity = xVelocity;
     }
 
-    public double getyVelocity() {
+    public double getYVelocity() {
         return yVelocity;
     }
 
-    public void setyVelocity(double yVelocity) {
+    public void setYVelocity(double yVelocity) {
         this.yVelocity = yVelocity;
     }
 }
