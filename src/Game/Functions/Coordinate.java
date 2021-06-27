@@ -1,4 +1,4 @@
-package Functions;
+package Game.Functions;
 
 import java.awt.geom.Point2D;
 

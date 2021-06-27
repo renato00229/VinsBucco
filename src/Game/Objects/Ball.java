@@ -1,7 +1,7 @@
-package Game;
+package Game.Objects;
 
-import Functions.Coordinate;
-import Functions.MovingObj;
+import Game.Functions.Coordinate;
+import Game.Functions.MovingObj;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -11,25 +11,37 @@ import java.util.Random;
 import static Game.GameBoard.MAX_SPEED;
 
 public class Ball implements Coordinate, MovingObj {
+    public static double initialSpeed = 0;
     private final Random random = new Random();
-    private final int R, G, B;
+    private final Color ball;
+    private final Color[] colors = new Color[]{
+            new Color(255, 0, 0),
+            new Color(255, 153, 18),
+            new Color(255, 246, 50),
+            new Color(126, 255, 90),
+            new Color(70, 248, 234),
+            new Color(18, 125, 255),
+            new Color(170, 50, 255),
+            new Color(255, 90, 247),
+
+    };
+    private final Ellipse2D.Double ballO, ballI;
     private double x;
     private double y;
     private double width;
     private double height;
-    public int initialSpeed = 0;
     private double xVelocity;
     private double yVelocity;
 
     public Ball(double x, double y, double Ball_W, double Ball_H) {
+        ballO = new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight());
+        ballI = new Ellipse2D.Double(getX() + 3, getY() + 3, getWidth() - 6, getHeight() - 6);
         this.setX(x);
         this.setY(y);
         this.setWidth(Ball_W);
         this.setHeight(Ball_H);
-        if (initialSpeed != 0) this.randomSpeed();
-        R = random.nextInt(255);
-        G = random.nextInt(255);
-        B = random.nextInt(255);
+        //if (initialSpeed != 0) this.randomSpeed();
+        ball = colors[random.nextInt(colors.length)];
     }
 
     private void randomSpeed() {
@@ -53,9 +65,12 @@ public class Ball implements Coordinate, MovingObj {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(R, G, B));
-        Ellipse2D.Double ball = new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight());
-        g2.fill(ball);
+        g2.setStroke(new BasicStroke(1.f));
+        g2.setColor(ball);
+        g2.fill(ballO);
+        g2.setColor(Color.black);
+        g2.draw(ballO);
+        g2.draw(ballI);
     }
 
 
@@ -67,12 +82,16 @@ public class Ball implements Coordinate, MovingObj {
         return x;
     }
     public void setX(double x) {
+        ballI.x = x + 2;
+        ballO.x = x;
         this.x = x;
     }
     public double getY() {
         return y;
     }
     public void setY(double y) {
+        ballI.y = y + 2;
+        ballO.y = y;
         this.y = y;
     }
 
@@ -82,6 +101,8 @@ public class Ball implements Coordinate, MovingObj {
     }
 
     public void setWidth(double width) {
+        ballO.width = width;
+        ballI.width = width - 4;
         this.width = width;
     }
 
@@ -90,6 +111,8 @@ public class Ball implements Coordinate, MovingObj {
     }
 
     public void setHeight(double height) {
+        ballO.height = height;
+        ballI.height = height - 4;
         this.height = height;
     }
 

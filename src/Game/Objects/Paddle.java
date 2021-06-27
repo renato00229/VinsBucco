@@ -1,20 +1,33 @@
-package Game;
+package Game.Objects;
 
-import Functions.Coordinate;
+import Game.Functions.Coordinate;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Paddle extends MouseAdapter implements MouseMotionListener, Coordinate {
-    private final double width, height;
+    private static BufferedImage paddle;
     private boolean drag;
-    private double x;
-    private double y;
+
+    static {
+        try {
+            paddle = ImageIO.read(new File("resources/paddle.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private final int width, height;
     private Point mouseP = new Point(-1, -1);
+    private int x;
+    private int y;
 
     public Paddle(int x, int y, int Paddle_W, int Paddle_H) {
         this.setX(x);
@@ -32,9 +45,7 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.BLUE);
-        Ellipse2D.Double paddle = new Ellipse2D.Double(getX(), getY(), width, height);
-        g2.fill(paddle);
+        g2.drawImage(paddle, x, y, x + width, y + height, 0, 0, paddle.getWidth(), paddle.getHeight(), null);
     }
 
     @Override
@@ -68,7 +79,7 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
     }
 
     public void setX(double x) {
-        this.x = x;
+        this.x = (int) x;
     }
 
     public double getY() {
@@ -76,7 +87,7 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
     }
 
     public void setY(double y) {
-        this.y = y;
+        this.y = (int) y;
     }
 
     public Point getMouseP() {

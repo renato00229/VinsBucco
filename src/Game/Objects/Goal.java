@@ -1,7 +1,7 @@
-package Game;
+package Game.Objects;
 
-import Functions.Coordinate;
-import Functions.MovingObj;
+import Game.Functions.Coordinate;
+import Game.Functions.MovingObj;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -16,19 +16,20 @@ public class Goal implements Coordinate, MovingObj {
     private double x;
     private double y;
     private double yVel;
+    private static Rectangle2D.Double paddle;
 
     public Goal(double randomY, double gw, double speed) {
         this.x = gw - 10;
         this.y = randomY;
-        this.width = 10;
+        this.width = 20;
         this.height = GOAL_HEIGHT;
         this.yVel = speed;
+        paddle = new Rectangle2D.Double(x, y, width, height);
     }
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
-        Rectangle2D.Double paddle = new Rectangle2D.Double(x, y, width, height);
+        g2.setColor(Color.ORANGE);
         g2.fill(paddle);
     }
 
@@ -68,11 +69,13 @@ public class Goal implements Coordinate, MovingObj {
 
     @Override
     public void setX(double x) {
+        paddle.x = x;
         this.x = x;
     }
 
     @Override
     public void setY(double y) {
+        paddle.y = y;
         this.y = y;
     }
 }

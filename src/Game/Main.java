@@ -1,5 +1,7 @@
-import Game.GameBoard;
-import Game.Score;
+package Game;
+
+import Game.Functions.Login;
+import Game.Objects.Score;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,10 +10,12 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static String USER = null, PASS = null;
+    public static GameBoard panel;
 
     public static void launchGame() {
+        if (panel != null) return;
         JFrame frame = new JFrame("Air Hockey");
-        GameBoard panel = new GameBoard();
+        panel = new GameBoard();
         frame.add(panel);
         frame.setResizable(false);
         frame.setBackground(Color.BLACK);

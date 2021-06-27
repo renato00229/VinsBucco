@@ -1,10 +1,17 @@
-import Game.Score;
+package Game.Functions;
+
+import Game.GameBoard;
+import Game.Main;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.*;
 import java.util.Scanner;
+
+import static Game.Main.USER;
+import static Game.Main.launchGame;
+import static Game.Objects.Score.tot_score;
 
 public class Login extends JFrame {
     private static final Dimension SCREEN = new Dimension(500, 500);
@@ -13,24 +20,33 @@ public class Login extends JFrame {
     private static final JLabel userLabel = new JLabel("USERNAME:");
     private static final JLabel passLabel = new JLabel("PASSWORD:");
     private static final JButton restart = new JButton("RESET SCORE"), keep = new JButton("CONTINUE FROM SCORE");
-    private static final JTextArea console = new JTextArea("", 5, 10);
+    private static final JTextArea console = new JTextArea("Insert user and password to restore previous score", 5, 10);
+
+    public static int startingOb = 0;
 
     static {
         restart.addActionListener(e -> {
             loadGame();
-            Main.launchGame();
+            console.setText("Score reset for player " + USER);
+            launchGame();
         });
         keep.addActionListener(e -> {
-            Score.tot_score = loadGame();
-            Main.launchGame();
+            tot_score = loadGame();
+            console.setText("found previous score " + tot_score);
+            for (int i = 0; i < tot_score; i++) {
+                GameBoard.GOAL_SPEED += 0.5;
+                if (i != 0 && i % 5 == 0) startingOb++;
+            }
+            launchGame();
         });
     }
 
-    public Login() {
+    public Login() throws IOException {
         super("Login to play");
         setSize(SCREEN);
         setDefaultLookAndFeelDecorated(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
         add(makePanel());
         add(console, SpringLayout.SOUTH);
         setVisible(true);
@@ -39,9 +55,7 @@ public class Login extends JFrame {
     private static int loadGame() {
         Main.USER = user.getText();
         Main.PASS = new String(pass.getPassword());
-        int score = getScore(Main.USER, Main.PASS);
-        console.setText("found previous score " + score);
-        return score;
+        return getScore(Main.USER, Main.PASS);
     }
 
     private static int getScore(String user, String pass) {
@@ -69,7 +83,7 @@ public class Login extends JFrame {
         return score;
     }
 
-    public static JPanel makePanel() {
+    public static JPanel makePanel() throws IOException {
         JPanel panel = new JPanel();
         panel.setSize(new Dimension(500, 350));
         panel.setBorder(new EmptyBorder(40, 10, 40, 10));
@@ -80,27 +94,32 @@ public class Login extends JFrame {
         panel.add(pass);
         panel.add(restart);
         panel.add(keep);
-        panel.setBackground(new Color(132, 255, 52, 188));
         return panel;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Login();
     }
 
-    public static int findAndSave(String user, String pass, int score) {
+    public static void findAndSave(String user, String pass, int score) {
+        if (user == null || pass == null) return;
+        RandomAccessFile rf = null;
         try {
             File f = new File("resources/log.txt");
-            FileReader fr = new FileReader(f);
-            RandomAccessFile rf = new RandomAccessFile(f, "rw");
-            while (!rf.readLine().equals(user + " " + pass)) {
+            rf = new RandomAccessFile(f, "rw");
+            try {
+                while (!rf.readLine().equals(user + " " + pass)) {
+                }
+            } catch (NullPointerException ignored) {
+                rf.close();
             }
             rf.writeBytes(score + "\n");
             rf.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (e.getMessage().equals("Stream Closed"))
+                System.err.println("User score not saved.");
+            else e.printStackTrace();
         }
-        return score;
     }
 
     public static void saveScore(String user, String pass, int score) {

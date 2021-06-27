@@ -1,4 +1,4 @@
-package Functions;
+package Game.Functions;
 
 public interface MovingObj {
     double getXVelocity();
