@@ -23,12 +23,12 @@ public class Login extends JFrame {
     private static final JTextArea console = new JTextArea("Insert user and password to restore previous score", 5, 10);
 
     public static int startingOb = 0;
-
-    static {
+    {
         restart.addActionListener(e -> {
             loadGame();
             console.setText("Score reset for player " + USER);
             launchGame();
+            dispose();
         });
         keep.addActionListener(e -> {
             tot_score = loadGame();
@@ -38,6 +38,7 @@ public class Login extends JFrame {
                 if (i != 0 && i % 5 == 0) startingOb++;
             }
             launchGame();
+            dispose();
         });
     }
 
