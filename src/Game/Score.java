@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 public class Score {
-    static int tot_score = 0;
+    public static int tot_score = 0;
     private static double GAME_WIDTH;
     private static double GAME_HEIGHT;
 
