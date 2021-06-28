@@ -1,8 +1,8 @@
 package Game;
 
-import Game.Functions.Coordinate;
-import Game.Functions.MovingObj;
 import Game.Objects.*;
+import Game.Utils.MovingObj;
+import Game.Utils.StaticObj;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,49 +16,38 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static Game.Functions.Login.startingOb;
-import static Game.Objects.Score.tot_score;
+import static Game.Objects.Score.SCORE;
+import static Game.Utils.Login.startingOb;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class GameBoard extends JPanel implements Runnable, KeyListener {
     public static final double GAME_WIDTH = 1000, GAME_HEIGHT = 600;
-    public static final Dimension SCREEN = new Dimension((int) GAME_WIDTH, (int) GAME_HEIGHT);
+    private static final Dimension SCREEN = new Dimension((int) GAME_WIDTH, (int) GAME_HEIGHT);
     public static final int PADDLE_HEIGHT = 60,
             PADDLE_WIDTH = 60,
             PADDLE_RAD = 30,
             BALL_RAD = 15,
             GOAL_HEIGHT = 150,
             MAX_SPEED = 6;
-    private final Score score;
     public static double GOAL_SPEED = 0;
-    private Goal goal;
-    private Ball ball;
+    private final Score score;
     private final Paddle paddle = new Paddle(0, 200, PADDLE_WIDTH, PADDLE_HEIGHT);
     private final List<Obstacle> obstacles = new ArrayList<>();
-    public void start() {
-        ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
-        service.scheduleWithFixedDelay(this, 30, 1, TimeUnit.MILLISECONDS);
+    private Goal goal;
+    private Ball ball;
+
+    private static double dist(StaticObj paddle, StaticObj ball) {
+        Point2D.Double cb = ball.center(), cp = paddle.center();
+        return abs((cb.x - cp.x) * (cb.x - cp.x) + (cb.y - cp.y) * (cb.y - cp.y));
     }
 
     public GameBoard() {
-        this.setMaximumSize(SCREEN);
-        this.setMinimumSize(SCREEN);
-        this.setPreferredSize(SCREEN);
-        this.setSize(SCREEN);
-        this.newBall();
-        this.newGoal();
-        this.addMouseMotionListener(this.paddle);
-        this.addKeyListener(this);
         this.score = new Score();
-        this.setFocusable(true);
-        for (int i = 0; i < startingOb; i++)
-            obstacles.add(new Obstacle());
     }
 
-    private static double dist(Coordinate paddle, Coordinate ball) {
-        Point2D.Double cb = ball.center(), cp = paddle.center();
-        return abs((cb.x - cp.x) * (cb.x - cp.x) + (cb.y - cp.y) * (cb.y - cp.y));
+    private static boolean collision(StaticObj a1, StaticObj a2, double r2) {
+        return dist(a1, a2) <= (BALL_RAD + r2) * (BALL_RAD + r2);
     }
 
     public void newBall() {
@@ -66,12 +55,13 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
                 (GAME_HEIGHT / 2.) - BALL_RAD, BALL_RAD * 2, BALL_RAD * 2);
     }
 
-    private static boolean collision(Coordinate a1, Coordinate a2, double r2) {
-        return dist(a1, a2) <= (BALL_RAD + r2) * (BALL_RAD + r2);
+    public void start() {
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
+        service.scheduleWithFixedDelay(this, 30, 3, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         this.move();
         this.checkHit(paddle, ball);
         for (Obstacle o : this.obstacles) this.checkHit(o, ball);
@@ -80,19 +70,19 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
     }
 
 
-    public void move() {
+    public synchronized void move() {
         this.ball.move();
         this.paddle.move();
         this.goal.move();
     }
 
-    public void checkCollision() {
-        this.ballCollisions();
+    public synchronized void checkCollision() {
+        this.ballEdges();
         this.paddleCollisions();
-        this.goalCollisions();
+        this.goalEdges();
     }
 
-    private void goalCollisions() {
+    private synchronized void goalEdges() {
         if (this.goal.getY() <= 0) {
             this.goal.setYVelocity(abs(this.goal.getYVelocity()));
             this.goal.setYVelocity(this.goal.getYVelocity());
@@ -103,39 +93,37 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
     }
 
-    private void ballCollisions() {
+    private synchronized void ballEdges() {
         //bounce ball off top & bottom window edges
-        if (this.ball.getY() < 0) {
-            this.ball.setYVelocity(abs(this.ball.getYVelocity()));
-            this.ball.setYVelocity(this.ball.getYVelocity());
-        }
-        if (this.ball.getY() > GAME_HEIGHT - BALL_RAD) {
-            this.ball.setYVelocity(abs(this.ball.getYVelocity()));
-            this.ball.setYVelocity(-this.ball.getYVelocity());
-        }
-        if (this.ball.getX() < 0) {
-            this.ball.setXVelocity(abs(this.ball.getXVelocity()));
-            this.ball.setXVelocity(this.ball.getXVelocity());
+        if (this.ball.getY() <= 0) {
+            this.ball.setYVelocity(abs(this.ball.getYVelocity())); //always positive
+        } else if (this.ball.getY() >= GAME_HEIGHT - 30) {
+            this.ball.setYVelocity(abs(this.ball.getYVelocity()) * -1);  //always negative
         }
 
-        if (this.ball.getX() > GAME_WIDTH - BALL_RAD) {
-            if (this.ball.getY() >= this.goal.getY() && this.ball.getY() <= this.goal.getY() + GOAL_HEIGHT) {
-                tot_score++;
+        if (this.ball.getX() <= 0) {
+            this.ball.setXVelocity(abs(this.ball.getXVelocity()));
+
+        } else if (this.ball.getX() > GAME_WIDTH - BALL_RAD) {
+            this.ball.setXVelocity(abs(this.ball.getXVelocity()) * -1);
+        }
+
+        if (this.ball.getX() >= GAME_WIDTH - 50) {  // 50 = (20 ,30)(goal width, 2*ball radius)
+            if (this.ball.getY() >= this.goal.getY() - BALL_RAD && this.ball.getY() <= this.goal.getY() + GOAL_HEIGHT - BALL_RAD) {
+                SCORE++;
                 GOAL_SPEED += 0.5;
-                newBall();
-                newGoal();
-                if (tot_score % 5 == 0) {
+                this.newBall();
+                this.newGoal();
+                if (SCORE % 5 == 0) {
                     obstacles.add(new Obstacle());
                 }
-            } else {
-                this.ball.setXVelocity(abs(this.ball.getXVelocity()));
-                this.ball.setXVelocity(-(this.ball.getXVelocity()));
             }
         }
+
     }
 
     @Override
-    public void paintComponent(Graphics graphics) {
+    public synchronized void paintComponent(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;
         g.setColor(new Color(217, 217, 217, 255));
         g.fill3DRect(0, 0, (int) GAME_WIDTH, (int) GAME_HEIGHT, false);
@@ -153,7 +141,7 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public synchronized void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             newBall();
         }
@@ -162,7 +150,7 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
     }
 
-    private void paddleCollisions() {
+    private synchronized void paddleCollisions() {
         if (this.paddle.getY() <= 0)
             this.paddle.setY(0);
         if (this.paddle.getY() >= (GAME_HEIGHT - PADDLE_HEIGHT))
@@ -178,19 +166,19 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
 
     }
 
-    public void checkHit(Coordinate static_obj, Coordinate moving_obj) {
-        //if (static_obj.getX() >= GAME_WIDTH / 2) return;   // don't make it move in right side of the field
+    public synchronized void checkHit(StaticObj static_obj, StaticObj moving_obj) {
         double r = (static_obj instanceof Paddle) ? PADDLE_RAD : 10;
         if (collision(static_obj, moving_obj, r)) {
             //static collisions (bodies can't exists inside each other
             double dist = sqrt(dist(static_obj, moving_obj));
+            dist = dist == 0 ? 1 : dist;
             double overlap = (dist - BALL_RAD - r) * .5;
             static_obj.setX(static_obj.getX() + overlap * (static_obj.getX() - moving_obj.getX()) / dist);
             static_obj.setY(static_obj.getY() + overlap * (static_obj.getY() - moving_obj.getY()) / dist);
             moving_obj.setX(moving_obj.getX() - overlap * (moving_obj.getX() - static_obj.getX()) / dist);
             moving_obj.setY(moving_obj.getY() - overlap * (moving_obj.getY() - static_obj.getY()) / dist);
-            ((MovingObj) moving_obj).setXVelocity(((MovingObj) moving_obj).getXVelocity() - overlap * (moving_obj.getX() - static_obj.getX()) * .1);
-            ((MovingObj) moving_obj).setYVelocity(((MovingObj) moving_obj).getYVelocity() - overlap * (moving_obj.getY() - static_obj.getY()) * .1);
+            ((MovingObj) moving_obj).setXVelocity(((MovingObj) moving_obj).getXVelocity() - overlap * (moving_obj.getX() - static_obj.getX()) * .05);
+            ((MovingObj) moving_obj).setYVelocity(((MovingObj) moving_obj).getYVelocity() - overlap * (moving_obj.getY() - static_obj.getY()) * .05);
         }
     }
 
@@ -198,4 +186,17 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         this.goal = new Goal(new Random().nextInt((int) GAME_HEIGHT - GOAL_HEIGHT), GAME_WIDTH, GOAL_SPEED);
     }
 
+    public void init() {
+        this.setMaximumSize(SCREEN);
+        this.setMinimumSize(SCREEN);
+        this.setPreferredSize(SCREEN);
+        this.setSize(SCREEN);
+        this.newBall();
+        this.newGoal();
+        this.addMouseMotionListener(this.paddle);
+        this.addKeyListener(this);
+        this.setFocusable(true);
+        for (int i = 0; i < startingOb; i++)
+            obstacles.add(new Obstacle());
+    }
 }

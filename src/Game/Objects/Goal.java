@@ -1,7 +1,7 @@
 package Game.Objects;
 
-import Game.Functions.Coordinate;
-import Game.Functions.MovingObj;
+import Game.Utils.MovingObj;
+import Game.Utils.StaticObj;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -10,30 +10,26 @@ import java.awt.geom.Rectangle2D;
 import static Game.GameBoard.GOAL_HEIGHT;
 import static Game.GameBoard.MAX_SPEED;
 
-public class Goal implements Coordinate, MovingObj {
-    private final double width;
-    private final double height;
+public final class Goal implements StaticObj, MovingObj {
     private double x;
     private double y;
     private double yVel;
     private static Rectangle2D.Double paddle;
 
     public Goal(double randomY, double gw, double speed) {
-        this.x = gw - 10;
+        this.x = gw - 20;
         this.y = randomY;
-        this.width = 20;
-        this.height = GOAL_HEIGHT;
         this.yVel = speed;
-        paddle = new Rectangle2D.Double(x, y, width, height);
+        paddle = new Rectangle2D.Double(x, y, 20, GOAL_HEIGHT);
     }
 
-    public void draw(Graphics g) {
+    public synchronized void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.ORANGE);
         g2.fill(paddle);
     }
 
-    public void move() {
+    public synchronized void move() {
         setYVelocity(Math.min(getYVelocity(), MAX_SPEED));
         setY(getY() + getYVelocity());
     }
@@ -55,7 +51,7 @@ public class Goal implements Coordinate, MovingObj {
 
     @Override
     public Point2D.Double center() {
-        return new Point2D.Double(this.x + 5, this.y + (GOAL_HEIGHT / 2.));
+        return new Point2D.Double(this.x + 10, this.y + (GOAL_HEIGHT / 2.));
     }
 
     @Override

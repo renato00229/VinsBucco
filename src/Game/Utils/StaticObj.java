@@ -1,8 +1,8 @@
-package Game.Functions;
+package Game.Utils;
 
 import java.awt.geom.Point2D;
 
-public interface Coordinate {
+public interface StaticObj {
     Point2D.Double center();
 
     double getX();

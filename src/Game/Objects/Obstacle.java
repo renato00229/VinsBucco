@@ -1,6 +1,6 @@
 package Game.Objects;
 
-import Game.Functions.Coordinate;
+import Game.Utils.StaticObj;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -10,7 +10,7 @@ import java.util.Random;
 import static Game.GameBoard.GAME_HEIGHT;
 import static Game.GameBoard.GAME_WIDTH;
 
-public class Obstacle implements Coordinate {
+public final class Obstacle implements StaticObj {
 
     private final double x, y;
     private final Ellipse2D.Double o;
@@ -23,7 +23,7 @@ public class Obstacle implements Coordinate {
         o = new Ellipse2D.Double(x, y, 20, 20);
     }
 
-    public void draw(Graphics g) {
+    public synchronized void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1.f));
         g2.setColor(Color.black);

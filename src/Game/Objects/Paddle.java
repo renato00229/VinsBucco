@@ -1,6 +1,6 @@
 package Game.Objects;
 
-import Game.Functions.Coordinate;
+import Game.Utils.StaticObj;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,13 +12,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Paddle extends MouseAdapter implements MouseMotionListener, Coordinate {
-    private static BufferedImage paddle;
+import static Game.GameBoard.GAME_WIDTH;
+
+public final class Paddle extends MouseAdapter implements MouseMotionListener, StaticObj {
+    private static BufferedImage paddleImage;
     private boolean drag;
 
     static {
         try {
-            paddle = ImageIO.read(new File("resources/paddle.png"));
+            paddleImage = ImageIO.read(new File("resources/paddle.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,13 +45,13 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
         }
     }
 
-    public void draw(Graphics g) {
+    public synchronized void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(paddle, x, y, x + width, y + height, 0, 0, paddle.getWidth(), paddle.getHeight(), null);
+        g2.drawImage(paddleImage, x, y, x + width, y + height, 0, 0, paddleImage.getWidth(), paddleImage.getHeight(), null);
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public synchronized void mouseDragged(MouseEvent e) {
         setMouseP(e.getPoint());
         if (getMouseP().x >= getX() && getMouseP().x <= (getX() + width) && getMouseP().y >= getY() && getMouseP().y <= (getY() + height)) {
             setDrag(true);
@@ -62,7 +64,7 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public synchronized void mouseReleased(MouseEvent e) {
         setDrag(false);
     }
 
@@ -94,7 +96,8 @@ public class Paddle extends MouseAdapter implements MouseMotionListener, Coordin
         return mouseP;
     }
 
-    public void setMouseP(Point mouseP) {
+    public synchronized void setMouseP(Point mouseP) {
+        if (mouseP.x >= GAME_WIDTH / 2) return;
         this.mouseP = mouseP;
     }
 }

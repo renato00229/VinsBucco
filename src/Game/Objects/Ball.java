@@ -1,7 +1,7 @@
 package Game.Objects;
 
-import Game.Functions.Coordinate;
-import Game.Functions.MovingObj;
+import Game.Utils.MovingObj;
+import Game.Utils.StaticObj;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -10,8 +10,7 @@ import java.util.Random;
 
 import static Game.GameBoard.MAX_SPEED;
 
-public class Ball implements Coordinate, MovingObj {
-    public static double initialSpeed = 0;
+public final class Ball implements StaticObj, MovingObj {
     private final Random random = new Random();
     private final Color ball;
     private final Color[] colors = new Color[]{
@@ -40,7 +39,6 @@ public class Ball implements Coordinate, MovingObj {
         this.setY(y);
         this.setWidth(Ball_W);
         this.setHeight(Ball_H);
-        //if (initialSpeed != 0) this.randomSpeed();
         ball = colors[random.nextInt(colors.length)];
     }
 
@@ -48,6 +46,7 @@ public class Ball implements Coordinate, MovingObj {
         int random_XDir = random.nextInt(2);
         if (random_XDir == 0)
             random_XDir--;
+        double initialSpeed = 0;
         setXVelocity(random_XDir * initialSpeed);
         int random_YDir = random.nextInt(2);
         if (random_YDir == 0)
@@ -56,14 +55,14 @@ public class Ball implements Coordinate, MovingObj {
     }
 
 
-    public void move() {
+    public synchronized void move() {
         setXVelocity(Math.min(getXVelocity(), MAX_SPEED));
         setYVelocity(Math.min(getYVelocity(), MAX_SPEED));
         setX(getX() + getXVelocity());
         setY(getY() + getYVelocity());
     }
 
-    public void draw(Graphics g) {
+    public synchronized void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1.f));
         g2.setColor(ball);

@@ -1,7 +1,7 @@
 package Game;
 
-import Game.Functions.Login;
 import Game.Objects.Score;
+import Game.Utils.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,21 +10,22 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static String USER = null, PASS = null;
-    public static GameBoard panel;
+    public static GameBoard game;
 
     public static void launchGame() {
-        if (panel != null) return;
+        if (game != null) return;
         JFrame frame = new JFrame("Air Hockey");
-        panel = new GameBoard();
-        frame.add(panel);
+        game = new GameBoard();
+        game.init();
+        frame.add(game);
         frame.setResizable(false);
         frame.setBackground(Color.BLACK);
         WindowAdapter closed = new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 WindowEvent listen = new WindowEvent(frame, 201);
                 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(listen);
+                Login.findAndSave(USER, PASS, Score.SCORE);
                 System.out.println("System closed by user");
-                Login.findAndSave(USER, PASS, Score.tot_score);
                 System.exit(0);
             }
         };
@@ -32,11 +33,12 @@ public class Main {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        panel.start();
+        game.start();
     }
 
     public static void main(String[] args) {
-        launchGame();
+        new Login();
+        //launchGame();
     }
 }
 

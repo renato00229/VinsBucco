@@ -1,4 +1,4 @@
-package Game.Functions;
+package Game.Utils;
 
 import Game.GameBoard;
 import Game.Main;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static Game.Main.USER;
 import static Game.Main.launchGame;
-import static Game.Objects.Score.tot_score;
+import static Game.Objects.Score.SCORE;
 
 public class Login extends JFrame {
     private static final Dimension SCREEN = new Dimension(500, 500);
@@ -21,36 +21,17 @@ public class Login extends JFrame {
     private static final JLabel passLabel = new JLabel("PASSWORD:");
     private static final JButton restart = new JButton("RESET SCORE"), keep = new JButton("CONTINUE FROM SCORE");
     private static final JTextArea console = new JTextArea("Insert user and password to restore previous score", 5, 10);
-
     public static int startingOb = 0;
-    {
-        restart.addActionListener(e -> {
-            loadGame();
-            console.setText("Score reset for player " + USER);
-            launchGame();
-            dispose();
-        });
-        keep.addActionListener(e -> {
-            tot_score = loadGame();
-            console.setText("found previous score " + tot_score);
-            for (int i = 0; i < tot_score; i++) {
-                GameBoard.GOAL_SPEED += 0.5;
-                if (i != 0 && i % 5 == 0) startingOb++;
-            }
-            launchGame();
-            dispose();
-        });
-    }
 
-    public Login() throws IOException {
+
+    public Login() {
         super("Login to play");
         setSize(SCREEN);
-        setDefaultLookAndFeelDecorated(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
         add(makePanel());
         add(console, SpringLayout.SOUTH);
         setVisible(true);
+        initListeners();
     }
 
     private static int loadGame() {
@@ -84,7 +65,7 @@ public class Login extends JFrame {
         return score;
     }
 
-    public static JPanel makePanel() throws IOException {
+    private static JPanel makePanel() {
         JPanel panel = new JPanel();
         panel.setSize(new Dimension(500, 350));
         panel.setBorder(new EmptyBorder(40, 10, 40, 10));
@@ -96,10 +77,6 @@ public class Login extends JFrame {
         panel.add(restart);
         panel.add(keep);
         return panel;
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Login();
     }
 
     public static void findAndSave(String user, String pass, int score) {
@@ -125,9 +102,9 @@ public class Login extends JFrame {
 
     public static void saveScore(String user, String pass, int score) {
         if (user == null || pass == null) return;
-        FileWriter fw = null;
+        FileWriter fw;
         try {
-            fw = new FileWriter(new File("resources/log.txt"), true);
+            fw = new FileWriter("resources/log.txt", true);
             fw.append(user).append(" ").append(pass).
                     append("\n").append(Integer.toString(score)).append("\n");
             fw.flush();
@@ -136,5 +113,25 @@ public class Login extends JFrame {
             e.printStackTrace();
         }
 
+    }
+
+
+    private void initListeners() {
+        restart.addActionListener(e -> {
+            loadGame();
+            console.setText("Score reset for player " + USER);
+            launchGame();
+            dispose();
+        });
+        keep.addActionListener(e -> {
+            SCORE = loadGame();
+            console.setText("found previous score " + SCORE);
+            for (int i = 0; i < SCORE; i++) {
+                GameBoard.GOAL_SPEED += 0.5;
+                if (i != 0 && i % 5 == 0) startingOb++;
+            }
+            launchGame();
+            dispose();
+        });
     }
 }
