@@ -27,9 +27,8 @@ public final class Score {
         g2.drawString(" press SPACE for a new ball ", 100f, 20);
         g2.drawString(" press ENTER for a new goal ", 100f, 35);
         g2.setFont(new Font("Consolas", Font.PLAIN, 30));
-        g2.drawString(" SCORE :  " + SCORE, (float) (GAME_WIDTH / 2 - 100), 40);
+        g2.drawString("SCORE :  " + SCORE, (float) (GAME_WIDTH / 2 - 100), 40);
     }
 
 
 }
-
