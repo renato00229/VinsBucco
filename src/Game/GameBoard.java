@@ -215,6 +215,8 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         this.addMouseMotionListener(this.paddle);
         this.addKeyListener(this);
         this.setFocusable(true);
+
+        //enter a new obstacle
         for (int i = 0; i < startingOb; i++)
             obstacles.add(new Obstacle());
     }

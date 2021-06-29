@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static Game.GameBoard.GAME_WIDTH;
 
+
 /**
  *
  * the paddle is represented by the image of the red paddle of Air Hockey

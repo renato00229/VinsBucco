@@ -10,6 +10,7 @@ import java.util.Random;
 import static Game.GameBoard.GAME_HEIGHT;
 import static Game.GameBoard.GAME_WIDTH;
 
+
 /**
  *
  * after 5 score will be generate an obstacle

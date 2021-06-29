@@ -87,6 +87,8 @@ public class Login extends JFrame {
         return panel;
     }
 
+
+    //save the score
     public static void findAndSave(String user, String pass, int score) {
         if (user == null || pass == null) return;
         RandomAccessFile rf = null;

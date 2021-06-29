@@ -7,6 +7,12 @@ import java.awt.geom.Rectangle2D;
 import static Game.GameBoard.GAME_HEIGHT;
 import static Game.GameBoard.GAME_WIDTH;
 
+
+/**
+ *
+ * draw the playground and enter the high score in the center
+ */
+
 public final class Score {
     private static final Ellipse2D.Double center = new Ellipse2D.Double(GAME_WIDTH / 2 - 70, GAME_HEIGHT / 2 - 70, 140, 140);
     private static final Rectangle2D.Double L = new Rectangle2D.Double(2, 1, GAME_WIDTH / 2 - 5, GAME_HEIGHT - 5),

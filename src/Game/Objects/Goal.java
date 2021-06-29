@@ -10,9 +10,11 @@ import java.awt.geom.Rectangle2D;
 import static Game.GameBoard.GOAL_HEIGHT;
 import static Game.GameBoard.MAX_SPEED;
 
+
 /**
  *
- * the goal is represented by a yellow Rectangle
+ * the goal is represented by a yellow Rectangle that is stationary at the start but  than it starts moving faster
+ * and faster
  */
 
 public final class Goal implements StaticObj, MovingObj {
@@ -34,6 +36,7 @@ public final class Goal implements StaticObj, MovingObj {
         g2.fill(paddle);
     }
 
+    //goal's velocity
     public synchronized void move() {
         setYVelocity(Math.min(getYVelocity(), MAX_SPEED));
         setY(getY() + getYVelocity());

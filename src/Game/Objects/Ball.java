@@ -10,6 +10,7 @@ import java.util.Random;
 
 import static Game.GameBoard.MAX_SPEED;
 
+
 /**
  *
  * the ball will be generated each time with different colors after scoring or pressing SPACE
