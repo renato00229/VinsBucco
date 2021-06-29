@@ -12,11 +12,19 @@ import static Game.GameBoard.MAX_SPEED;
 
 
 /**
+ * Ball final class implements two Interfaces
  *
- * the ball will be generated each time with different colors after scoring or pressing SPACE
+ * @author Elena
+ * @author Vincenzo
+ *
  */
 
+
 public final class Ball implements StaticObj, MovingObj {
+    /**
+     * the ball will be generated each time with different colors after scoring or pressing SPACE
+     */
+
     private final Random random = new Random();
     private final Color ball;
 

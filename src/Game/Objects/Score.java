@@ -9,15 +9,25 @@ import static Game.GameBoard.GAME_WIDTH;
 
 
 /**
+ * Score final class
  *
- * draw the playground and enter the high score in the center
+ * @author Elena
+ * @author Vincenzo
+ *
  */
+
 
 public final class Score {
     private static final Ellipse2D.Double center = new Ellipse2D.Double(GAME_WIDTH / 2 - 70, GAME_HEIGHT / 2 - 70, 140, 140);
     private static final Rectangle2D.Double L = new Rectangle2D.Double(2, 1, GAME_WIDTH / 2 - 5, GAME_HEIGHT - 5),
             R = new Rectangle2D.Double(GAME_WIDTH / 2 + 2, 1, GAME_WIDTH / 2 - 5, GAME_HEIGHT - 5);
     public static int SCORE = 0;
+
+    /**
+     * This method is useful to draw graphic objects
+     *
+     * draw the playground and enter the high score in the center
+     */
 
     public synchronized void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

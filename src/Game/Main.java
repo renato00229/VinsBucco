@@ -68,9 +68,10 @@ public class Main {
         game.start();
     }
 
+
     /**
-     *
-     * @Login #is first invoked
+     * This is the main method. It runs the login panel.
+     * @param args Unused.
      */
 
     public static void main(String[] args) {

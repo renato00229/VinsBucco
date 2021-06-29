@@ -10,18 +10,29 @@ import java.util.Random;
 import static Game.GameBoard.GAME_HEIGHT;
 import static Game.GameBoard.GAME_WIDTH;
 
-
 /**
+ * Obstacle final class implements two Interfaces
  *
- * after 5 score will be generate an obstacle
- * one every five scores!!!
+ * @author Elena
+ * @author Vincenzo
+ *
  */
 
+
 public final class Obstacle implements StaticObj {
+
+    /**
+     * after 5 score will be generate an obstacle
+     * one every five scores!!!
+     */
 
     private final double x, y;
     private final Ellipse2D.Double o;
 
+    /**
+     * Obstacles are generated randomly
+     *
+     */
     public Obstacle() {
 
         double p = new Random().nextInt(((int) (GAME_WIDTH / 2)) - 10);

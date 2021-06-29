@@ -12,16 +12,24 @@ import static Game.GameBoard.MAX_SPEED;
 
 
 /**
+ * Goal final class implements two Interfaces
  *
- * the goal is represented by a yellow Rectangle that is stationary at the start but  than it starts moving faster
- * and faster
+ * @author Elena
+ * @author Vincenzo
+ *
  */
+
 
 public final class Goal implements StaticObj, MovingObj {
     private double x;
     private double y;
     private double yVel;
     private static Rectangle2D.Double paddle;
+
+    /**
+     * The goal is represented by a yellow Rectangle that is stationary at the start but  than it starts moving faster
+     * and faster
+     */
 
     public Goal(double randomY, double gw, double speed) {
         this.x = gw - 20;

@@ -21,15 +21,22 @@ import static Game.Utils.Login.startingOb;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
-
 /**
- * Gameboard represents the main panel in which the game is developed
+ * Gameboard is the main body of the game's GUI. It extends JPanel and implements
+ * listeners and runnable.
+ * It gives the dimension to the general panel
  *
- * @GameBoard #class where the game is played and includes:
+ * GameBoard is the class where the game is played and includes:
+ * Paddle
+ * Goal
+ * Ball
+ * Obstacle
+ * Score
  *
- * @Ball
- * @Paddle
- * @Goal
+ *
+ *  * @author Elena
+ *  * @author Vincenzo
+ *  *
  */
 
 public class GameBoard extends JPanel implements Runnable, KeyListener {
@@ -41,29 +48,56 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
             BALL_RAD = 15,
             GOAL_HEIGHT = 150,
             MAX_SPEED = 6;
+
+    /**
+     * Initial speed = 0
+     */
     public static double GOAL_SPEED = 0;
+
     private final Score score;
     private final Paddle paddle = new Paddle(0, 200, PADDLE_WIDTH, PADDLE_HEIGHT);
     private final List<Obstacle> obstacles = new ArrayList<>();
     private Goal goal;
     private Ball ball;
 
+
+    /**
+     * This method returns the distance between paddle and ball
+     *
+     * @param paddle
+     * @param ball
+     * @return abs
+     */
+
     private static double dist(StaticObj paddle, StaticObj ball) {
         Point2D.Double cb = ball.center(), cp = paddle.center();
         return abs((cb.x - cp.x) * (cb.x - cp.x) + (cb.y - cp.y) * (cb.y - cp.y));
     }
 
+    /**
+     * update the score
+     *
+     */
+
     public GameBoard() {
+
         this.score = new Score();
     }
 
+
     /**
+     *  this method checks collision through distance
      *
-     * @collision #between Ball and Paddle
+     * @param a1        object 1
+     * @param a2        object 2
+     * @param r2        radius
+     * @return boolean
      */
+
     private static boolean collision(StaticObj a1, StaticObj a2, double r2) {
         return dist(a1, a2) <= (BALL_RAD + r2) * (BALL_RAD + r2);
     }
+
 
     /**
      *
@@ -75,6 +109,10 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
                 (GAME_HEIGHT / 2.) - BALL_RAD, BALL_RAD * 2, BALL_RAD * 2);
     }
 
+    /**
+     * Start the threads
+     *
+     */
 
     public void start() {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
@@ -135,10 +173,19 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         if (this.ball.getX() >= GAME_WIDTH - 50) {  // 50 = (20 ,30)(goal width, 2*ball radius)
             if (this.ball.getY() >= this.goal.getY() - BALL_RAD && this.ball.getY() <= this.goal.getY() + GOAL_HEIGHT - BALL_RAD)
             {
+                //increases score
+
                 SCORE++;
+
+                //increases goal's speed
+
                 GOAL_SPEED += 0.5;
+
                 this.newBall();
                 this.newGoal();
+
+                //add an obstacle
+
                 if (SCORE % 5 == 0) {
                     obstacles.add(new Obstacle());
                 }
@@ -173,6 +220,14 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
+
+
+    /**
+     * This method is called every time the player presses a key on the keyboard.
+     * This method is concerned with seeing if the key pressed is the "SPACE" key or "ENTER" key.
+     * In this way the player decides to create a new ball or create a new goal.
+     * @param	e		A KeyEvent
+     */
 
     @Override
     public synchronized void keyPressed(KeyEvent e) {
@@ -223,12 +278,20 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
     }
 
-    //generate a goal
+    /**
+     * this method creates a new goal
+     *
+     */
+
     private void newGoal() {
         this.goal = new Goal(new Random().nextInt((int) GAME_HEIGHT - GOAL_HEIGHT), GAME_WIDTH, GOAL_SPEED);
     }
 
-    //the game is launched
+    /**
+     * The game is launched
+     *
+     */
+
     public void init() {
         this.setMaximumSize(SCREEN);
         this.setMinimumSize(SCREEN);
@@ -240,7 +303,11 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         this.addKeyListener(this);
         this.setFocusable(true);
 
-        //enter a new obstacle
+        /**
+         * This loop is to create the same number of obstacles as there where when you saved the
+         * score.
+         */
+
         for (int i = 0; i < startingOb; i++)
             obstacles.add(new Obstacle());
     }

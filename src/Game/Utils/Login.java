@@ -15,11 +15,13 @@ import static Game.Objects.Score.SCORE;
 
 
 /**
- * In the first panel you can authenticate yourself with an username and a password in order to
- * register your score and save the game.
- * Also, you can cancel previous score and start a new game. Use a file to save yours information and
- * the greater score.
-*/
+ * Login class extends JFrame
+ *
+ * @author Elena
+ * @author Vincenzo
+ *
+ */
+
 
 public class Login extends JFrame {
     private static final Dimension SCREEN = new Dimension(500, 500);
@@ -31,6 +33,12 @@ public class Login extends JFrame {
     private static final JTextArea console = new JTextArea("Insert user and password to restore previous score", 5, 10);
     public static int startingOb = 0;
 
+    /**
+     * In the first panel you can authenticate yourself with an username and a password in order to
+     * register your score and save the game.
+     * Also, you can cancel previous score and start a new game. Use a file to save yours information and
+     * the greater score.
+     */
 
     public Login() {
         super("Login to play");
@@ -42,11 +50,24 @@ public class Login extends JFrame {
         initListeners();
     }
 
+    /**
+     *  This method loads loads username and password
+     */
+
     private static int loadGame() {
         Main.USER = user.getText();
         Main.PASS = new String(pass.getPassword());
         return getScore(Main.USER, Main.PASS);
     }
+
+
+    /**
+     * this method reads from file and stores the data
+     *
+     * @param user      this parameter represent the username
+     * @param pass      this parameter represent the password
+     * @return score
+     */
 
     private static int getScore(String user, String pass) {
         if (user.equals("") && pass.equals("")) return 0;
@@ -73,6 +94,11 @@ public class Login extends JFrame {
         return score;
     }
 
+    /**
+     * this method makes a Panel to insert user and password to start the game
+     *
+     */
+
     private static JPanel makePanel() {
         JPanel panel = new JPanel();
         panel.setSize(new Dimension(500, 350));
@@ -88,7 +114,14 @@ public class Login extends JFrame {
     }
 
 
-    //save the score
+    /**
+     * This method serves to read the score and rewrite the score
+     *
+     * @param user      this parameter represent the username
+     * @param pass      this parameter represent the password
+     * @param score
+     */
+
     public static void findAndSave(String user, String pass, int score) {
         if (user == null || pass == null) return;
         RandomAccessFile rf = null;
@@ -105,12 +138,20 @@ public class Login extends JFrame {
             rf.close();
         } catch (IOException e) {
             if (e.getMessage().equals("Stream Closed"))
+                //nothing
                 System.err.println("User score not saved.");
             else e.printStackTrace();
         }
     }
 
-    //Save the last score
+    /**
+     * This method saves the score
+     *
+     * @param user      this parameter represent the username
+     * @param pass      this parameter represent the password
+     * @param score
+     */
+
     public static void saveScore(String user, String pass, int score) {
         if (user == null || pass == null) return;
         FileWriter fw;
