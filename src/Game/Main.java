@@ -8,6 +8,13 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * Main class
+ *
+ * @author Elena
+ * @author Vincenzo
+ *
+ */
 
 
 /**
@@ -30,6 +37,8 @@ import java.awt.event.WindowEvent;
  * @Goal #java class
  * if your ball goes to the goal, your score is increased by 1
  */
+
+
 
 public class Main {
     public static String USER = null, PASS = null;

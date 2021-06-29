@@ -65,7 +65,11 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         return dist(a1, a2) <= (BALL_RAD + r2) * (BALL_RAD + r2);
     }
 
-    //generate a ball
+    /**
+     *
+     * This method generate a  new ball
+     */
+
     public void newBall() {
         this.ball = new Ball((GAME_WIDTH / 2.) - BALL_RAD,
                 (GAME_HEIGHT / 2.) - BALL_RAD, BALL_RAD * 2, BALL_RAD * 2);
@@ -93,11 +97,13 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         this.goal.move();
     }
 
+
     public synchronized void checkCollision() {
         this.ballEdges();
         this.paddleCollisions();
         this.goalEdges();
     }
+
 
     private synchronized void goalEdges() {
         if (this.goal.getY() <= 0) {
@@ -109,6 +115,7 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
             this.goal.setYVelocity(-this.goal.getYVelocity());
         }
     }
+
 
     private synchronized void ballEdges() {
         //bounce ball off top & bottom window edges
@@ -126,7 +133,8 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
 
         if (this.ball.getX() >= GAME_WIDTH - 50) {  // 50 = (20 ,30)(goal width, 2*ball radius)
-            if (this.ball.getY() >= this.goal.getY() - BALL_RAD && this.ball.getY() <= this.goal.getY() + GOAL_HEIGHT - BALL_RAD) {
+            if (this.ball.getY() >= this.goal.getY() - BALL_RAD && this.ball.getY() <= this.goal.getY() + GOAL_HEIGHT - BALL_RAD)
+            {
                 SCORE++;
                 GOAL_SPEED += 0.5;
                 this.newBall();
@@ -138,6 +146,15 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
 
     }
+
+
+    /**
+     * This method is concerned with drawing the graphical interface.
+     * Draw the ball, the goal, the paddle and score
+     *
+     * @param graphics		A graphic object.
+     */
+
 
     @Override
     public synchronized void paintComponent(Graphics graphics) {
@@ -167,15 +184,20 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
     }
 
+
     private synchronized void paddleCollisions() {
-        if (this.paddle.getY() <= 0)
+        if (this.paddle.getY() <= 0) {
             this.paddle.setY(0);
-        if (this.paddle.getY() >= (GAME_HEIGHT - PADDLE_HEIGHT))
+        }
+        if (this.paddle.getY() >= (GAME_HEIGHT - PADDLE_HEIGHT)) {
             this.paddle.setY((GAME_HEIGHT - PADDLE_HEIGHT));
-        if (this.paddle.getX() <= 0)
+        }
+        if (this.paddle.getX() <= 0) {
             this.paddle.setX(0);
-        if (this.paddle.getX() >= (GAME_WIDTH / 2 - PADDLE_WIDTH))
+        }
+        if (this.paddle.getX() >= (GAME_WIDTH / 2 - PADDLE_WIDTH)) {
             this.paddle.setX((GAME_WIDTH / 2 - PADDLE_WIDTH));
+        }
     }
 
     @Override
@@ -183,8 +205,10 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
 
     }
 
+
     public synchronized void checkHit(StaticObj static_obj, StaticObj moving_obj) {
         double r = (static_obj instanceof Paddle) ? PADDLE_RAD : 10;
+
         if (collision(static_obj, moving_obj, r)) {
             //static collisions (bodies can't exists inside each other
             double dist = sqrt(dist(static_obj, moving_obj));
