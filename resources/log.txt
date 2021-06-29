@@ -1,2 +1,12 @@
 user password
 52
+elena ciao
+15
+elena purple
+15
+elena bucco
+27
+elena bruce
+1
+elena ok
+0

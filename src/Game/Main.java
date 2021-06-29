@@ -14,7 +14,7 @@ public class Main {
 
     public static void launchGame() {
         if (game != null) return;
-        JFrame frame = new JFrame("Air Hockey");
+        JFrame frame = new JFrame("Air Hockey - Single Player");
         game = new GameBoard();
         game.init();
         frame.add(game);
