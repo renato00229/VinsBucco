@@ -75,7 +75,7 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
     }
 
     /**
-     * update the score
+     * New score
      *
      */
 
