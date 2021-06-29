@@ -14,6 +14,11 @@ import java.io.IOException;
 
 import static Game.GameBoard.GAME_WIDTH;
 
+/**
+ *
+ * the paddle is represented by the image of the red paddle of Air Hockey
+ */
+
 public final class Paddle extends MouseAdapter implements MouseMotionListener, StaticObj {
     private static BufferedImage paddleImage;
     private boolean drag;
@@ -96,6 +101,7 @@ public final class Paddle extends MouseAdapter implements MouseMotionListener, S
         return mouseP;
     }
 
+    //the paddle can't go beyond its half field
     public synchronized void setMouseP(Point mouseP) {
         if (mouseP.x >= GAME_WIDTH / 2) return;
         this.mouseP = mouseP;

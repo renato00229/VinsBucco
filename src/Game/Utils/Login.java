@@ -15,9 +15,12 @@ import static Game.Objects.Score.SCORE;
 
 
 /**
-In the first panel users can authenticate theirself whith an username and a password in order to register their score and save the game.
-Also, they can cancel previous score and start a new game. We use a file to save the users informations and the greater score. 
+ * In the first panel you can authenticate yourself with an username and a password in order to
+ * register your score and save the game.
+ * Also, you can cancel previous score and start a new game. Use a file to save yours information and
+ * the greater score.
 */
+
 public class Login extends JFrame {
     private static final Dimension SCREEN = new Dimension(500, 500);
     private static final JTextField user = new JTextField("");
@@ -105,6 +108,7 @@ public class Login extends JFrame {
         }
     }
 
+    //Save the last score
     public static void saveScore(String user, String pass, int score) {
         if (user == null || pass == null) return;
         FileWriter fw;

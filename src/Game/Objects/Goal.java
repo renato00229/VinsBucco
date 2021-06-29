@@ -10,6 +10,11 @@ import java.awt.geom.Rectangle2D;
 import static Game.GameBoard.GOAL_HEIGHT;
 import static Game.GameBoard.MAX_SPEED;
 
+/**
+ *
+ * the goal is represented by a yellow Rectangle
+ */
+
 public final class Goal implements StaticObj, MovingObj {
     private double x;
     private double y;

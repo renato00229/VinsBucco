@@ -10,9 +10,16 @@ import java.util.Random;
 
 import static Game.GameBoard.MAX_SPEED;
 
+/**
+ *
+ * the ball will be generated each time with different colors after scoring or pressing SPACE
+ */
+
 public final class Ball implements StaticObj, MovingObj {
     private final Random random = new Random();
     private final Color ball;
+
+    //septum the various colors
     private final Color[] colors = new Color[]{
             new Color(255, 0, 0),
             new Color(255, 153, 18),

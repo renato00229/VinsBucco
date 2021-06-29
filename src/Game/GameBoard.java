@@ -21,6 +21,17 @@ import static Game.Utils.Login.startingOb;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
+
+/**
+ * Gameboard represents the main panel in which the game is developed
+ *
+ * @GameBoard #class where the game is played and includes:
+ *
+ * @Ball
+ * @Paddle
+ * @Goal
+ */
+
 public class GameBoard extends JPanel implements Runnable, KeyListener {
     public static final double GAME_WIDTH = 1000, GAME_HEIGHT = 600;
     private static final Dimension SCREEN = new Dimension((int) GAME_WIDTH, (int) GAME_HEIGHT);
@@ -46,14 +57,20 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         this.score = new Score();
     }
 
+    /**
+     *
+     * @collision #between Ball and Paddle
+     */
     private static boolean collision(StaticObj a1, StaticObj a2, double r2) {
         return dist(a1, a2) <= (BALL_RAD + r2) * (BALL_RAD + r2);
     }
 
+    //generate a ball
     public void newBall() {
         this.ball = new Ball((GAME_WIDTH / 2.) - BALL_RAD,
                 (GAME_HEIGHT / 2.) - BALL_RAD, BALL_RAD * 2, BALL_RAD * 2);
     }
+
 
     public void start() {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
@@ -182,10 +199,12 @@ public class GameBoard extends JPanel implements Runnable, KeyListener {
         }
     }
 
+    //generate a goal
     private void newGoal() {
         this.goal = new Goal(new Random().nextInt((int) GAME_HEIGHT - GOAL_HEIGHT), GAME_WIDTH, GOAL_SPEED);
     }
 
+    //the game is launched
     public void init() {
         this.setMaximumSize(SCREEN);
         this.setMinimumSize(SCREEN);
